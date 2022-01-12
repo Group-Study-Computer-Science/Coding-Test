@@ -1,0 +1,105 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	
+	public static int[][] check;
+	public static int[][] arr;
+	public static LinkedList<Pos> fishes = new LinkedList<>();
+	public static int size = 2;
+	public static int eat = 0;
+	public static int[] ny = {-1, 0, 1, 0};
+	public static int[] nx = {0, 1, 0, -1};
+	
+	public static class Pos{
+		int x;
+		int y;
+		int dist;
+		
+		public Pos(int x, int y, int dist) {
+			this.x = x;
+			this.y = y;
+			this.dist = dist;
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		arr = new int[n][n];
+		Queue<Pos> queue = new LinkedList<>();
+		int time = 0;
+		
+		for(int i=0; i<n; i++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for(int j=0; j<n; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+				if(arr[i][j] == 9) {
+					//System.out.print("상어!");
+					queue.add(new Pos(i, j, 0));
+					arr[i][j] = 0;
+				}
+				//System.out.print(arr[i][j]+" ");
+			}
+			//System.out.println();
+		}
+		
+		
+		while(true) {
+			LinkedList<Pos> fish = new LinkedList<>();
+			check = new int[n][n];
+			
+			while(!queue.isEmpty()) {
+				
+				
+				Pos pos = queue.poll();
+				//System.out.println(pos+" ");
+				for(int i=0; i<4; i++) {
+					int movx = pos.x + nx[i];
+					int movy = pos.y + ny[i];
+					
+					//지나간다
+					if( movx>=0 && movy>=0 && movx<n && movy<n && check[movx][movy] == 0 && size >= arr[movx][movy] ) {
+						check[movx][movy] = check[pos.x][pos.y] + 1;
+						queue.add(new Pos(movx, movy, check[movx][movy]));
+						//생선 먹기
+						if(arr[movx][movy]>0 && arr[movx][movy]<=6 && arr[movx][movy]<size) {
+							fish.add(new Pos(movx, movy, check[movx][movy]));
+						}
+					}
+				}			
+				
+			}
+			
+			if(fish.size() == 0){
+	            System.out.println(time);
+	            return;
+	        }
+			
+			Pos currentFish = fish.get(0);
+	        for(int i = 1; i < fish.size(); i++){
+	            if(currentFish.dist > fish.get(i).dist) {
+	                currentFish = fish.get(i);
+	            }else if(currentFish.dist == fish.get(i).dist) {
+	                if(currentFish.x > fish.get(i).x) {
+	                	currentFish = fish.get(i);
+	                }else if(currentFish.x == fish.get(i).x){
+	                    if(currentFish.y > fish.get(i).y) currentFish = fish.get(i);   
+	                }
+	            }   
+	        }
+	         
+	        time += currentFish.dist;
+	        eat++;
+	        arr[currentFish.x][currentFish.y] = 0;
+	        if(eat == size) {
+	            size++;
+	            eat = 0;
+	        }
+	        queue.add(new Pos(currentFish.x, currentFish.y, 0));
+		}
+		
+		
+	}
+	
+}
