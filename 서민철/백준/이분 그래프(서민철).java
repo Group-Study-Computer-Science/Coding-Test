@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
 	public static class Node {
-		int num;
+		int num; 
 		boolean color, visited;
 		ArrayList<Node> friends;
 
