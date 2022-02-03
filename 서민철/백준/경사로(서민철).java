@@ -17,9 +17,9 @@ public class Main {
 
 		N = Integer.parseInt(st.nextToken());
 		L = Integer.parseInt(st.nextToken());
+		way = 2 * N;
 
 		map = new int[N][N];
-		way = 2 * N;
 
 		for (int y = 0; y < N; y++) {
 			st = new StringTokenizer(br.readLine(), " ");
