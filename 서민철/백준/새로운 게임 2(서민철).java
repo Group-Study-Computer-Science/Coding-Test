@@ -226,6 +226,7 @@ public class Main {
 					System.out.printf("%d ", map[y][x].getSize());
 				}
 			}
+
 			System.out.println();
 		}
 
